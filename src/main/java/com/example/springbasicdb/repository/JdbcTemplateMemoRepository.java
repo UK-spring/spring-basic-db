@@ -3,12 +3,16 @@ package com.example.springbasicdb.repository;
 import com.example.springbasicdb.dto.MemoResponseDto;
 import com.example.springbasicdb.entity.Memo;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Repository
@@ -37,8 +41,8 @@ public class JdbcTemplateMemoRepository implements MemoRepository {
     }
 
     @Override
-    public Map<Long, Memo> findAllMemos() {
-        return null;
+    public List<MemoResponseDto> findAllMemos() {
+        return jdbcTemplate.query("select * from memo", memoRowMapper());
     }
 
     @Override
@@ -49,6 +53,20 @@ public class JdbcTemplateMemoRepository implements MemoRepository {
     @Override
     public void deleteMemo(Long id) {
 
+    }
+
+    private RowMapper<MemoResponseDto> memoRowMapper() {
+        return new RowMapper<MemoResponseDto>() {
+            @Override
+            public MemoResponseDto mapRow(ResultSet rs, int rowNum) throws SQLException {
+                return new MemoResponseDto(
+                        rs.getLong("id"),
+                        rs.getString("title"),
+                        rs.getString("contents")
+                );
+            }
+
+        };
     }
 
 }
