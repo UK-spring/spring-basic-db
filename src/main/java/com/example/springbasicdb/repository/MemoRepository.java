@@ -6,9 +6,7 @@ import java.util.Map;
 
 public interface MemoRepository {
 
-    Long getMemoId();
-
-    void saveMemo(Memo memo);
+    Long saveMemo(Memo memo);
 
     Map<Long, Memo> findAllMemos();
 
