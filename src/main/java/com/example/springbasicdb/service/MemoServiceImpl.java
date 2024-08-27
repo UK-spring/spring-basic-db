@@ -33,21 +33,19 @@ public class MemoServiceImpl implements MemoService {
         // 요청받은 데이터로 Memo 객체 생성
         Memo memo = new Memo(requestDto.getTitle(), requestDto.getContents());
 
-        // Inmemory DB에 Memo 저장
-        Long memoId = memoRepository.saveMemo(memo);
-
-        return new MemoResponseDto(memoId, memo.getTitle(), memo.getContents());
+        // 저장
+        return memoRepository.saveMemo(memo);
     }
 
     @Override
     public List<MemoResponseDto> findAllMemos() {
         // init List
         List<MemoResponseDto> responseList = new ArrayList<>();
-
-        // 전체 조회
+//
+//        // 전체 조회
         Map<Long, Memo> memoList = memoRepository.findAllMemos();
-
-        // HashMap<Memo> -> List<MemoResponseDto>
+//
+//        // HashMap<Memo> -> List<MemoResponseDto>
         for (Memo memo : memoList.values()) {
             MemoResponseDto responseDto = new MemoResponseDto(memo);
             responseList.add(responseDto);

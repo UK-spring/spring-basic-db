@@ -1,5 +1,6 @@
 package com.example.springbasicdb.repository;
 
+import com.example.springbasicdb.dto.MemoResponseDto;
 import com.example.springbasicdb.entity.Memo;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -20,7 +21,7 @@ public class JdbcTemplateMemoRepository implements MemoRepository {
     }
 
     @Override
-    public Long saveMemo(Memo memo) {
+    public MemoResponseDto saveMemo(Memo memo) {
         // INSERT Query를 직접 작성하지 않아도 된다.
         SimpleJdbcInsert jdbcInsert = new SimpleJdbcInsert(jdbcTemplate);
         jdbcInsert.withTableName("memo").usingGeneratedKeyColumns("id");
@@ -29,9 +30,10 @@ public class JdbcTemplateMemoRepository implements MemoRepository {
         parameters.put("title", memo.getTitle());
         parameters.put("contents", memo.getContents());
 
+        // 저장 후 생성된 key값을 Number 타입으로 반환하는 메서드
         Number key = jdbcInsert.executeAndReturnKey(new MapSqlParameterSource(parameters));
-        // memo id 필드의 타입인 Long으로 변환
-        return key.longValue();
+
+        return new MemoResponseDto(key.longValue(), memo.getTitle(), memo.getContents());
     }
 
     @Override
@@ -48,4 +50,5 @@ public class JdbcTemplateMemoRepository implements MemoRepository {
     public void deleteMemo(Long id) {
 
     }
+
 }

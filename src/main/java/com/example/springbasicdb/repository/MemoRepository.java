@@ -1,12 +1,13 @@
 package com.example.springbasicdb.repository;
 
+import com.example.springbasicdb.dto.MemoResponseDto;
 import com.example.springbasicdb.entity.Memo;
 
 import java.util.Map;
 
 public interface MemoRepository {
 
-    Long saveMemo(Memo memo);
+    MemoResponseDto saveMemo(Memo memo);
 
     Map<Long, Memo> findAllMemos();
 
