@@ -78,24 +78,24 @@ public class MemoServiceImpl implements MemoService {
         return new MemoResponseDto(memoRepository.findMemoById(id).get());
     }
 
+    @Transactional
     @Override
     public MemoResponseDto updateTitle(Long id, String title, String contents) {
-//        // memo 조회
-//        Memo memo = memoRepository.findMemoById(id);
-//
-//        // NPE 방지
-//        if (memo == null) {
-//            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Does not exist id = " + id);
-//        }
-//        // 필수값 검증
-//        if (title == null || contents != null) {
-//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The title and content are required values.");
-//        }
-//
-//        memo.update(title);
-//
-//        return new MemoResponseDto(memo);
-        return null;
+
+        // 필수값 검증
+        if (title == null || contents != null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The title and content are required values.");
+        }
+
+        // memo 제목 수정
+        int updatedRow = memoRepository.updateTitle(id, title);
+        // 수정된 row가 0개 라면
+        if (updatedRow == 0) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Does not exist id = " + id);
+        }
+
+        // 수정된 메모 조회
+        return new MemoResponseDto(memoRepository.findMemoById(id).get());
     }
 
     @Override
